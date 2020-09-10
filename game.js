@@ -6,6 +6,8 @@ let ctx;
 let food;
 let snake;
 let fps;
+let score;
+let isPaused;
 
 //game objects initialization
 function init() {
@@ -25,6 +27,9 @@ function init() {
     snake = new Snake({ x: tileSize * Math.floor(width / (2 * tileSize)), y: tileSize * Math.floor(height / (2 * tileSize)) }, "#39ff14")
     
     fps = 10;
+
+    score = 0;
+    isPaused = false;
 }
 
 class Food {
@@ -182,6 +187,10 @@ function game() {
 //the "game loop"
 function update () {
 
+    if (isPaused){
+        return;
+    }
+
     if (snake.die()) {
         alert("GAME OVER");
         clearInterval(interval);
@@ -192,6 +201,7 @@ function update () {
 
     if (snake.eat()) {
         food = new Food(spawnLocation(), "red")
+        score += 10;
     }
 
     //clearing canvas for redrawing
@@ -200,4 +210,23 @@ function update () {
     food.draw();
     snake.draw();
     snake.move();
+    showScore();
 }
+
+function showScore() {
+
+    ctx.textAlign = "center";
+    ctx.font = "25px Arial";
+    ctx.fillStyle = "white";
+    ctx.fillText("SCORE: " + score, width - 120, 30);
+
+}
+
+function showPaused() {
+
+    ctx.textAlign = "center";
+    ctx.font = "35px Arial";
+    ctx.fillStyle = "white";
+    ctx.fillText("PAUSED", width / 2, height / 2);
+}
+
