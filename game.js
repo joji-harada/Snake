@@ -1,6 +1,6 @@
 let width;
 let height;
-let titleSize;
+let tileSize;
 let canvas;
 let ctx;
 let food;
@@ -8,10 +8,10 @@ let food;
 //game objects initialization
 function init() {
 
-    titleSize = 20;
+    tileSize = 20;
 
-    width = titleSize * Math.floor(window.innerWidth / titleSize);
-    height = titleSize * Math.floor(window.innerHeight / titleSize);
+    width = tileSize * Math.floor(window.innerWidth / tileSize);
+    height = tileSize * Math.floor(window.innerHeight / tileSize);
 
     canvas = document.getElementById("game-area");
     canvas.width = width;
@@ -35,7 +35,7 @@ class Food {
     draw() {
 
         ctx.beginPath();
-        ctx.rect(this.x, this.y, titleSize, titleSize);
+        ctx.rect(this.x, this.y, tileSize, tileSize);
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.strokeStyle = "black";
@@ -48,14 +48,23 @@ class Food {
 
 function spawnLocation() {
 
-    let rows = width / titleSize;
-    let cols = height / titleSize;
+    let rows = width / tileSize;
+    let cols = height / tileSize;
 
     let xPos, yPos;
 
-    xPos = Math.floor(Math.random() * rows) * titleSize;
-    yPos = Math.floor(Math.random() * cols) * titleSize;
+    xPos = Math.floor(Math.random() * rows) * tileSize;
+    yPos = Math.floor(Math.random() * cols) * tileSize;
 
     return { x: xPos, y: yPos };
 }
 
+class Snake {
+
+    constructor(pos, color) {
+
+        this.x = pos.x;
+        this.y = pos.y;
+        this.tail = [{ x: pos.x - tileSize, y: pos.y }, { x: pos.x - tileSize * 2, y: pos.y }];
+    }
+}
