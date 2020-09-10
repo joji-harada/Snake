@@ -66,5 +66,40 @@ class Snake {
         this.x = pos.x;
         this.y = pos.y;
         this.tail = [{ x: pos.x - tileSize, y: pos.y }, { x: pos.x - tileSize * 2, y: pos.y }];
+        this.velX = 1;
+        this.velY = 0;
+        this.color = color;
+
+    }
+
+    draw() {
+
+        //the head
+        ctx.beginPath();
+        ctx.rect(this.x, this.y, tileSize, tileSize);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.closePath();
+
+        //the tail
+        for (var i = 0; i < this.tail.length; i++) {
+
+            tx.beginPath();
+            ctx.rect(this.tail[i].x, this.tail[i].y, tileSize, tileSize);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            ctx.closePath();
+
+        }
+    }
+
+    move() {
+        
     }
 }
