@@ -45,3 +45,17 @@ class Food {
 
     }
 }
+
+function spawnLocation() {
+
+    let rows = width / titleSize;
+    let cols = height / titleSize;
+
+    let xPos, yPos;
+
+    xPos = Math.floor(Math.random() * rows) * titleSize;
+    yPos = Math.floor(Math.random() * cols) * titleSize;
+
+    return { x: xPos, y: yPos };
+}
+
