@@ -4,6 +4,8 @@ let tileSize;
 let canvas;
 let ctx;
 let food;
+let snake;
+let fps;
 
 //game objects initialization
 function init() {
@@ -19,7 +21,10 @@ function init() {
     ctx = canvas.getContext("2d");
 
     food = new Food(spawnLocation(), "red");
-   
+
+    snake = new Snake({ x: tileSize * Math.floor(width / (2 * tileSize)), y: tileSize * Math.floor(height / (2 * tileSize)) }, "#39ff14")
+    
+    fps = 10;
 }
 
 class Food {
@@ -152,6 +157,7 @@ class Snake {
         return false;
     }
 
+    //sends snake to other side of the border if crossed
     border() {
 
         if (this.x + tileSize > width && this.velX != -1 || this.x < 0 && this.velX != 1)
@@ -161,5 +167,37 @@ class Snake {
             this.y = height - this.y;
 
     }
-    
+
+}
+
+//starts the game
+function game() {
+
+    init();
+
+    interval = setInterval(update, 1000/fps);
+
+}
+
+//the "game loop"
+function update () {
+
+    if (snake.die()) {
+        alert("GAME OVER");
+        clearInterval(interval);
+        window.location.reload();
+    }
+
+    snake.border();
+
+    if (snake.eat()) {
+        food = new Food(spawnLocation(), "red")
+    }
+
+    //clearing canvas for redrawing
+    ctx.clearRect(0, 0, width, height);
+
+    food.draw();
+    snake.draw();
+    snake.move();
 }
