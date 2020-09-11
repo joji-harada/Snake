@@ -258,3 +258,9 @@ window.addEventListener("keydown", function (evt) {
     }
 
 });
+
+window.addEventListener("load", function() {
+
+    game();
+
+});
