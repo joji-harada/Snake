@@ -5,56 +5,45 @@ let canvas;
 let ctx;
 let food;
 let snake;
+let interval
 let fps;
 let score;
 let isPaused;
 
-//game objects initialization
-function init() {
+window.addEventListener("load", function() {
 
-    tileSize = 20;
+    game();
 
-    width = tileSize * Math.floor(window.innerWidth / tileSize);
-    height = tileSize * Math.floor(window.innerHeight / tileSize);
+});
 
-    canvas = document.getElementById("game-area");
-    canvas.width = width;
-    canvas.height = height;
-    ctx = canvas.getContext("2d");
-
-    food = new Food(spawnLocation(), "red");
-
-    snake = new Snake({ x: tileSize * Math.floor(width / (2 * tileSize)), y: tileSize * Math.floor(height / (2 * tileSize)) }, "#39ff14")
-    
-    fps = 10;
-
-    score = 0;
-    isPaused = false;
-}
-
-class Food {
-
-    constructor(pos, color) {
-        
-        this.x = pos.x;
-        this.y = pos.y;
-        this.color = color;
-
+window.addEventListener("keydown", function (evt) {
+    if (evt.key === " ") {
+        evt.preventDefault();
+        isPaused = !isPaused;
+        showPaused();
+    }
+    else if (evt.key === "ArrowUp") {
+        evt.preventDefault();
+        if (snake.velY != 1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
+            snake.dir(0, -1);
+    }
+    else if (evt.key === "ArrowDown") {
+        evt.preventDefault();
+        if (snake.velY != -1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
+            snake.dir(0, 1);
+    }
+    else if (evt.key === "ArrowLeft") {
+        evt.preventDefault();
+        if (snake.velX != 1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
+            snake.dir(-1, 0);
+    }
+    else if (evt.key === "ArrowRight") {
+        evt.preventDefault();
+        if (snake.velX != -1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
+            snake.dir(1, 0);
     }
 
-    draw() {
-
-        ctx.beginPath();
-        ctx.rect(this.x, this.y, tileSize, tileSize);
-        ctx.fillStyle = this.color;
-        ctx.fill();
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 3;
-        ctx.stroke();
-        ctx.closePath();
-
-    }
-}
+});
 
 function spawnLocation() {
 
@@ -67,6 +56,24 @@ function spawnLocation() {
     yPos = Math.floor(Math.random() * cols) * tileSize;
 
     return { x: xPos, y: yPos };
+}
+
+function showScore() {
+
+    ctx.textAlign = "center";
+    ctx.font = "25px Arial";
+    ctx.fillStyle = "white";
+    ctx.fillText("SCORE: " + score, width - 120, 30);
+
+}
+
+function showPaused() {
+
+    ctx.textAlign = "center";
+    ctx.font = "35px Arial";
+    ctx.fillStyle = "white";
+    ctx.fillText("PAUSED", width / 2, height / 2);
+
 }
 
 class Snake {
@@ -97,7 +104,7 @@ class Snake {
         //the tail
         for (var i = 0; i < this.tail.length; i++) {
 
-            tx.beginPath();
+            ctx.beginPath();
             ctx.rect(this.tail[i].x, this.tail[i].y, tileSize, tileSize);
             ctx.fillStyle = this.color;
             ctx.fill();
@@ -113,7 +120,7 @@ class Snake {
 
         //movement of tail
         for (var i = this.tail.length - 1; i > 0; i--) {
-            
+
             this.tail[i] = this.tail[i - 1];
 
         }
@@ -155,11 +162,14 @@ class Snake {
 
         for (var i = 0; i < this.tail.length; i++) {
 
-            if (Math.abs(this.x - this.tail[i].x) < tileSize && Math.abs(this.y - this.tail[i].y < tileSize)) {
+            if (Math.abs(this.x - this.tail[i].x) < tileSize && Math.abs(this.y - this.tail[i].y) < tileSize) {
                 return true;
             }
+
         }
+
         return false;
+
     }
 
     //sends snake to other side of the border if crossed
@@ -175,12 +185,50 @@ class Snake {
 
 }
 
-//starts the game
-function game() {
+class Food {
 
-    init();
+    constructor(pos, color) {
 
-    interval = setInterval(update, 1000/fps);
+        this.x = pos.x;
+        this.y = pos.y;
+        this.color = color;
+
+    }
+
+    draw() {
+
+        ctx.beginPath();
+        ctx.rect(this.x, this.y, tileSize, tileSize);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.closePath();
+
+    }
+
+}
+
+//game objects initialization
+function init() {
+
+    tileSize = 20;
+
+    width = tileSize * Math.floor(window.innerWidth / tileSize);
+    height = tileSize * Math.floor(window.innerHeight / tileSize);;
+
+    fps = 10;
+
+    canvas = document.getElementById("game-area");
+    canvas.width = width;
+    canvas.height = height;
+    ctx = canvas.getContext("2d");
+
+    isPaused = false;
+    score = 0;
+    snake = new Snake({ x: tileSize * Math.floor(width / (2 * tileSize)), y: tileSize * Math.floor(height / (2 * tileSize)) }, "#39ff14");
+    food = new Food(spawnLocation(), "red");
 
 }
 
@@ -200,8 +248,8 @@ function update () {
     snake.border();
 
     if (snake.eat()) {
-        food = new Food(spawnLocation(), "red")
         score += 10;
+        food = new Food(spawnLocation(), "red")
     }
 
     //clearing canvas for redrawing
@@ -213,54 +261,12 @@ function update () {
     showScore();
 }
 
-function showScore() {
 
-    ctx.textAlign = "center";
-    ctx.font = "25px Arial";
-    ctx.fillStyle = "white";
-    ctx.fillText("SCORE: " + score, width - 120, 30);
+//starts the game
+function game() {
+
+    init();
+
+    interval = setInterval(update, 1000/fps);
 
 }
-
-function showPaused() {
-
-    ctx.textAlign = "center";
-    ctx.font = "35px Arial";
-    ctx.fillStyle = "white";
-    ctx.fillText("PAUSED", width / 2, height / 2);
-}
-
-window.addEventListener("keydown", function (evt) {
-    if (evt.key === " ") {
-        evt.preventDefault();
-        isPaused = !isPaused;
-        showPaused();
-    }
-    else if (evt.key === "ArrowUp") {
-        evt.preventDefault();
-        if (snake.velY != 1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
-            snake.dir(0, -1);
-    }
-    else if (evt.key === "ArrowDown") {
-        evt.preventDefault();
-        if (snake.velY != -1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
-            snake.dir(0, 1);
-    }
-    else if (evt.key === "ArrowLeft") {
-        evt.preventDefault();
-        if (snake.velX != 1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
-            snake.dir(-1, 0);
-    }
-    else if (evt.key === "ArrowRight") {
-        evt.preventDefault();
-        if (snake.velX != -1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
-            snake.dir(1, 0)
-    }
-
-});
-
-window.addEventListener("load", function() {
-
-    game();
-
-});
