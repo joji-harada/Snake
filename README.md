@@ -3,4 +3,4 @@
 
  play game here: http://jojiwebdesigns.com/snake/
 
-[snake](https://imgur.com/xVNg1Dc)
+![snake](https://media.giphy.com/media/PmGdTTbwhFcfEkW0h8/giphy.gif)
