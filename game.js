@@ -38,17 +38,21 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
     
         if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
             if ( xDiff > 0 ) {
+                evt.preventDefault();
                 if (snake.velX != 1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
-            snake.dir(-1, 0);
+                    snake.dir(-1, 0);
             } else {
+                evt.preventDefault();
                 if (snake.velX != -1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
                     snake.dir(1, 0);
             }                       
         } else {
             if ( yDiff > 0 ) {
+                evt.preventDefault();
                 if (snake.velY != 1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
                     snake.dir(0, -1);
             } else { 
+                evt.preventDefault();
                 if (snake.velY != -1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
                     snake.dir(0, 1);
             }                                                                 
