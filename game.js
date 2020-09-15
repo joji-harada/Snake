@@ -32,7 +32,7 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
         var xDiff = xDown - xUp;
         var yDiff = yDown - yUp;
     
-        if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) { /*most significant*/
+        if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
             if ( xDiff > 0 ) {
                 if (snake.velX != 1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
             snake.dir(-1, 0);
