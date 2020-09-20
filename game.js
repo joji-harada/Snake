@@ -58,7 +58,27 @@ function detectswipe(el,func) {
 }
 
 function myfunction(el,d) {
-    alert("you swiped on element with id '"+el+"' to "+d+" direction");
+    //alert(d);
+    if ( d === "u" ) {
+        evt.preventDefault();
+        if (snake.velY != 1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
+            snake.dir(0, -1);
+    }
+    else if ( d === "d" ) {
+        evt.preventDefault();
+        if (snake.velY != -1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
+            snake.dir(0, 1);
+    }
+    else if ( d === "l" ) {
+        evt.preventDefault();
+        if (snake.velX != 1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
+            snake.dir(-1, 0);
+    }
+    else if ( d === "r" ) {
+        evt.preventDefault();
+        if (snake.velX != -1 && snake.x >= 0 && snake.x <= width && snake.y >= 0 && snake.y <= height)
+            snake.dir(1, 0);
+    }
   }
 
 detectswipe('game-area', myfunction);
